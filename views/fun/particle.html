@@ -1,0 +1,450 @@
+{{extend 'layout.html'}}
+<script src="../static/js/dancer/src/dancer.js"></script>
+<script src="../static/js/dancer/src/support.js"></script>
+<script src="../static/js/dancer/src/kick.js"></script>
+<script src="../static/js/dancer/src/adapterWebkit.js"></script>
+<script src="../static/js/dancer/src/adapterMoz.js"></script>
+<script src="../static/js/dancer/src/adapterFlash.js"></script>
+<script src="../static/js/dancer/lib/fft.js"></script>
+<script src="../static/js/dancer/lib/flash_detect.js"></script>
+<script src="../static/js/dancer/plugins/dancer.fft.js"></script>
+<script src="../static/js/hellothree.js"></script>
+<script src="../static/js/stats.js"></script>
+<script src="../static/js/detector.js"></script>
+<style type="text/css">
+
+
+#fft{
+	display: block;
+	position: absolute;
+	right: 0px;
+	bottom: 70px;
+	background: black;
+}
+#loading{
+	display: block;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+}
+#rawData{
+	display: block;
+	position: absolute;
+ 	top: 0px;
+ 	right: 0px;
+ 	padding-left:20px;
+ 	width: 400px;
+ 	height: 300px;
+ 		background: black;
+	color: white;
+ 	overflow:hidden;
+}
+#info{
+	display: block;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+	width: 500px;
+}
+#innerScroll{
+	position:absolute;
+	bottom:0;
+	display: block;
+	width: 100%;
+	height: 100%;
+
+}
+#innerRight{
+	position:absolute;
+displaY: block;
+
+width: 50%;
+right: 0px;
+	bottom:0;
+}
+#container {
+position: absolute;
+top: 100px;
+width: 800px;
+height: 600px;
+
+}
+#innerLeft{
+	position:absolute;
+displaY: block;
+
+width: 50%;
+	bottom:0;
+}
+#buttonBox{
+	position: absolute;
+	right: 0px;
+	bottom: 470px;
+}
+#loading{
+	display: none;
+}
+/*
+h1{
+	color: white;
+}
+body{
+	background: black;
+}*/
+</style>
+<h1>music canvas</h1>
+<div id="loading">Loading . . .</div>
+<div id="rawData">
+	<div id="innerScroll">
+		<div id="innerLeft">
+		</div>
+		<div id="innerRight">
+		</div>
+		
+	</div>
+</div>
+<div id="buttonBox">
+	<button id="btnPlay">play</button>
+	<button id="btnPause">pause</button>
+</div>
+
+<canvas id="fft" height="400" width="512"></canvas>
+
+<div id="container"><canvas width="800" height="600"></canvas></div>
+
+<script type="text/javascript">
+
+	
+	
+	// threejs
+		
+//////////	
+// MAIN //
+//////////
+
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+// standard global variables
+var container, scene, camera, renderer, controls, stats;
+
+var clock = new THREE.Clock();
+
+// custom global variables
+var cube;
+
+// initialization
+init();
+
+// animation loop / game loop
+animate();
+
+///////////////
+// FUNCTIONS //
+///////////////
+			
+function init() 
+{
+	///////////
+	// SCENE //
+	///////////
+	scene = new THREE.Scene();
+
+	////////////
+	// CAMERA //
+	////////////
+	
+	// set the view size in pixels (custom or according to window size)
+	// var SCREEN_WIDTH = 400, SCREEN_HEIGHT = 300;
+	var SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600;	
+	// camera attributes
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+	// set up camera
+	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+	// add the camera to the scene
+	scene.add(camera);
+	// the camera defaults to position (0,0,0)
+	// 	so pull it back (z = 400) and up (y = 100) and set the angle towards the scene origin
+	camera.position.set(0,150,400);
+	camera.lookAt(scene.position);	
+	
+	//////////////
+	// RENDERER //
+	//////////////
+	
+	// create and start the renderer; choose antialias setting.
+	renderer = new THREE.WebGLRenderer( {antialias:true} );
+	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	// create a div element to contain the renderer
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	// alternatively: if you insert the div via HTML, access it using
+	//   container = document.getElementById( 'container' );
+
+	// attach renderer to the container div
+	container.appendChild( renderer.domElement );
+	
+	
+	//////////////
+	// CONTROLS //
+	//////////////
+
+	// move mouse and: left   click (or hold 'A') to rotate, 
+	//                 middle click (or hold 'S') to zoom, 
+	//                 right  click (or hold 'D') to pan
+//	controls = new THREE.TrackballControls( camera );
+	
+	///////////
+	// STATS //
+	///////////
+	
+	// displays current and past frames per second attained by scene
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.bottom = '0px';
+	stats.domElement.style.zIndex = 100;
+	container.appendChild( stats.domElement );
+	
+	///////////
+	// LIGHT //
+	///////////
+	
+	// create a light
+	var light = new THREE.PointLight(0xffffff);
+	light.position.set(0,250,0);
+	scene.add(light);
+	var ambientLight = new THREE.AmbientLight(0x111111);
+	// scene.add(ambientLight);
+	
+	//////////////
+	// GEOMETRY //
+	//////////////
+		
+	// most objects displayed are a "mesh":
+	//  a collection of points ("geometry") and
+	//  a set of surface parameters ("material")	
+
+	// Sphere parameters: radius, segments along width, segments along height
+	var sphereGeometry = new THREE.SphereGeometry( 50, 32, 16 ); 
+	// use a "lambert" material rather than "basic" for realistic lighting.
+	//   (don't forget to add (at least one) light!)
+	var sphereMaterial = new THREE.MeshLambertMaterial( {color: 0x8888ff} ); 
+	var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+	sphere.position.set(100, 50, -50);
+//	scene.add(sphere);
+	
+	var cube = new THREE.Mesh(
+		new THREE.CubeGeometry(50,50,50),
+        new THREE.MeshBasicMaterial({color: 0x000000})
+		);
+	cube.position.set(0, 100, 0);
+	scene.add(cube);
+	
+	var part = new THREE.Particle(
+		new THREE.MeshBasicMaterial({color: 0x000000})
+		);
+	scene.add(part)
+	
+	// try particle
+	
+	particles = new THREE.Geometry(),
+		pMaterial = new THREE.ParticleBasicMaterial({
+			color: 0xFFFFFF,
+			size: 10,
+			map: THREE.ImageUtils.loadTexture(
+				"../static/images/particle.png"
+			),
+			blending: THREE.AdditiveBlending,
+			transparent: true
+		});
+	var particleSystem = new THREE.ParticleSystem(
+			particles,
+			pMaterial);
+		
+		particleSystem.sortParticles = true;
+		
+		// add it to the scene
+		scene.add(particleSystem);
+	
+	
+	// Create an array of materials to be used in a cube, one for each side
+	var cubeMaterialArray = [];
+	// order to add materials: x+,x-,y+,y-,z+,z-
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff3333 } ) );
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xff8800 } ) );
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xffff33 } ) );
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x33ff33 } ) );
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x3333ff } ) );
+	cubeMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0x8833ff } ) );
+	// Cube parameters: width (x), height (y), depth (z), 
+	//        (optional) segments along x, segments along y, segments along z, materials array
+	var cubeGeometry = new THREE.CubeGeometry( 100, 100, 100, 1, 1, 1, cubeMaterialArray );
+	// using THREE.MeshFaceMaterial() in the constructor below
+	//   causes the mesh to use the materials stored in the geometry
+	cube = new THREE.Mesh( cubeGeometry, new THREE.MeshFaceMaterial() );
+	cube.position.set(-100, 50, -50);
+//	scene.add( cube );		
+
+	// create a set of coordinate axes to help orient user
+	// default size is 100 pixels in each direction; change size by setting scale
+	var axes = new THREE.AxisHelper();
+	axes.scale.set( 1, 1, 1 );
+//	scene.add( axes );
+	
+	///////////
+	// FLOOR //
+	///////////
+	
+	// note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
+	var floorTexture = new THREE.ImageUtils.loadTexture( '../static/images/checkerboard.jpg' );
+	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+	floorTexture.repeat.set( 10, 10 );
+	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture } );
+	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	floor.position.y = -0.5;
+	floor.doubleSided = true;
+//	scene.add(floor);
+	
+	/////////
+	// SKY //
+	/////////
+	
+	// recommend either a skybox or fog effect (can't use both at the same time) 
+	// without one of these, the scene's background color is determined by webpage background
+
+	// make sure the camera's "far" value is large enough so that it will render the skyBox!
+	var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff } );
+	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+	skyBox.flipSided = true; // render faces from inside of the cube, instead of from outside (default).
+//	scene.add(skyBox);
+	
+	// fog must be added to scene before first render
+	scene.fog = new THREE.FogExp2( 0x9999ff, 0.00025 );
+}
+
+function animate() 
+{
+    requestAnimationFrame( animate );
+	render();		
+	update();
+}
+
+function update()
+{
+	// delta = change in time since last call (in seconds)
+	var delta = clock.getDelta(); 
+
+	
+//	controls.update();
+	stats.update();
+}
+
+function render() 
+{	
+	renderer.render( scene, camera );
+}
+	
+	
+	
+	
+	// dancer.js
+
+
+	(function () {
+
+		  var
+		//    AUDIO_FILE = '../songs/zircon_devils_spirit',
+		    AUDIO_FILE = '../static/music/schism',
+		    fft = document.getElementById( 'fft' ),
+		    ctx = fft.getContext( '2d' ),
+		    dancer, kick;
+
+		  /*
+		   * Dancer.js magic 
+		 
+		  Dancer.setOptions({
+		    flashSWF : '../static/js/dancer/lib/soundmanager2.swf',
+		    flashJS  : '../static/js/dancer/lib/soundmanager2.js'
+		  });
+			  */
+		  dancer = new Dancer();
+			  
+		  var wave;
+		  
+		  var count = 0;
+		  
+		  dancer.after(1, function(){
+			  count += 1;
+			  if (count%5 == 0){
+				  wave = dancer.getWaveform()
+				  $("#innerLeft").append("<BR>" + wave[2])
+				  $("#innerRight").append("<BR>" + wave[50])
+							  
+			  }
+
+		  })
+			
+		//  blah = dancer.getFrequency( freq [ endFreq ] )
+		  kick = dancer.createKick({
+			    onKick: function () {
+			      ctx.fillStyle = '#ffffff';
+			    },
+			    offKick: function () {
+			      ctx.fillStyle = '#666';
+			    }
+			  }).on();
+		  dancer
+		    .fft( fft, { fillStyle: '#666' })
+		    .load({ src: AUDIO_FILE, codecs: [  'mp3' ]});
+		  Dancer.isSupported() || loaded();
+		  !dancer.isLoaded() ? dancer.bind( 'loaded', loaded ) : loaded();
+
+		  /*
+		   * Loading
+		   */
+
+		  function loaded () {
+		    var
+		      loading = document.getElementById( 'loading' ),
+		      anchor  = document.createElement('A'),
+		      supported = Dancer.isSupported(),
+		      p;
+
+		    anchor.appendChild( document.createTextNode( supported ? 'Play!' : 'Close' ) );
+		    anchor.setAttribute( 'href', '#' );
+		    loading.innerHTML = '';
+		    loading.appendChild( anchor );
+
+		    if ( !supported ) {
+		      p = document.createElement('P');
+		      p.appendChild( document.createTextNode( 'Your browser does not currently support either Web Audio API or Audio Data API. The audio may play, but the visualizers will not move to the music; check out the latest Chrome or Firefox browsers!' ) );
+		      loading.appendChild( p );
+		    }
+
+		    anchor.addEventListener( 'click', function () {
+		      dancer.play();
+		      document.getElementById('loading').style.display = 'none';
+		    });
+		  }
+
+		  // For debugging
+		  window.dancer = dancer;
+
+		})();
+
+	// Event listeners
+	
+	$("#btnPlay").click(function(){
+		dancer.play()
+		
+	})
+	$("#btnPause").click(function(){
+		dancer.pause()
+		
+	})
+
+
+</script>
+
+	</body>

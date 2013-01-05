@@ -1,0 +1,224 @@
+
+{{extend 'layout.html'}}
+
+<script type="text/javascript" src="http://jqueryrotate.googlecode.com/svn/trunk/jQueryRotate.js"></script>
+<script src="{{=URL('profile','static/js','audio.min.js')}}"></script>
+
+<style>
+
+
+#jigsawRotatee{
+	width: 150px;
+	height:150px;
+
+}
+
+</style>
+
+<div id="jigContainer">
+</div>
+<div id="audioBox">
+	<audio id="audioControls" autoplay="autoplay">
+		<source src="{{=URL('profile','static/music', 'schism.mp3')}}">
+	</audio> 
+	
+	<div id="audioContent">
+		Tool - Schism
+		<span><a>legal</a></span>
+	</div>
+</div>
+<div id="infoBox">
+<center>
+<h4 style="color:white; margin-top:0px;">about</h4>
+
+i was listening to schism by <a id="toolLink" href="http://www.toolband.com/" target="_blank">tool</a> and
+thought this was an interesting concept so i thought i'd make this
+<BR>
+why?
+<BR>
+because i can
+</center>
+</div>
+
+<script type="text/javascript">
+
+audiojs.events.ready(function() {
+    var as = audiojs.createAll();
+  });
+	
+	/*
+		so i was listening to shism by tool and thought that would 
+		be a cool thing to try, so the following is a series of 
+		falling jigsaw puzzle pieces. I am using animate to move the
+		pieces down the page, as it has a end function taht i will
+		use to terminate the piece, while i use the simple setInverval
+		to rotate each piece, but everything will be Math.random()
+		so it looks semi-natual
+		
+		so, let us begin!
+	
+	*/
+
+	// first off, safari does not support <audio>, ergo:
+/*		var userAgent = navigator.userAgent.toLowerCase(); 
+		$.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
+		if(($.browser.safari && !($.browser.chrome)) || ($.browser.mozilla)){
+			if (confirm("it appears your browser doesn't support <audio> and at the moment i don't have time to do a walk around.... just download chrome. Proceed anyway?")) {
+			    // Save it!
+				} 
+					else {
+			    	window.location = "https://www.google.com/intl/en/chrome/browser/"
+					}
+			
+		}
+//		alert("chrome:" + $.browser.chrome + " saf:" + $.browser.safari + " moz: " + $.browser.mozilla)
+	
+	*/
+	
+	
+	// globals
+	pageHeight = window.innerHeight;
+	pageWidth = window.innerWidth - 150;
+	// num of images at once
+	totNum = 15
+	fallTime = 13000
+	
+	pieceNum = totNum + 1
+	cont = "'" + pageHeight + 200 + "px"
+	
+	// on ready, load all jigsaws randomly
+	$(document).ready(function() {
+
+		// get parent div
+		parent = $("#jigContainer")
+		
+		// create imgs
+		var x = totNum;
+		
+		while(x--){
+			imgSrc = "{{=URL('profile','static/images','jigsaw.png')}}"
+			img = "<img class='jigsawPiece' id='piece_" + x + "' src='" + imgSrc + "'>"
+		//	parent.append(img)
+			$(img).appendTo("#jigContainer")
+			
+			
+			randomX = Math.random()*(pageWidth-100);
+			
+/*			if (randomX > (pageWidth - 190)){
+				randomX -= 110
+			}
+	*/		
+			$("#piece_" + x).css('left',randomX + 200)
+			animateThatPiece(x);
+
+		}
+		
+		
+	
+	});
+	
+	
+	
+function animateThatPiece(x){
+	
+	tempFall = Math.random()*2000
+	if(Math.random() < 0.5){
+		tempFall = -tempFall
+	}
+	tempFall = fallTime + tempFall
+	
+	if (x < totNum){
+		$("#piece_" + x).delay(Math.random()*12000).animate({ 
+	        top: newX
+		},{
+			duration: tempFall,
+		 
+	        
+	        complete: function() {
+	              $("#piece_" + x).remove();
+	              getNewPiece();
+	     
+	        }
+	        });
+	}
+	else{
+		$("#piece_" + x).animate({ 
+	        top: newX
+		},{
+			duration: tempFall,
+		 
+	        
+	        complete: function() {
+	              $("#piece_" + x).remove();
+	              getNewPiece();
+	     
+	        }
+	        });
+		
+	}	
+	
+
+	var angle = 0;
+	direction = Math.random()
+	if (direction < 0.5){
+		setInterval(function(){
+		      angle+=Math.random()*3;
+		     $("#piece_" + x).rotate(angle);
+		},Math.random()*50);
+	}
+	else{
+		setInterval(function(){
+		      angle+=Math.random()*3;
+		     $("#piece_" + x).rotate(-angle);
+		},Math.random()*50);
+	}
+	
+
+	
+	
+};
+
+
+
+function getNewPiece(){
+	
+		x = pieceNum;
+		pieceNum += 1;
+		
+		imgSrc = "{{=URL('profile','static/images','jigsaw.png')}}"
+		img = "<img class='jigsawPiece' id='piece_" + x + "' src='" + imgSrc + "'>"
+		//parent.append(img)
+		$(img).appendTo("#jigContainer")
+		
+		
+		randomX = Math.random()*(pageWidth-100);
+		
+/*		if (randomX > (pageWidth - 190)){
+			randomX -= 110
+		}
+	*/	$("#piece_" + x).css('left',randomX + 200)
+		animateThatPiece(x);
+	
+	
+}
+
+	
+	// set up set interval
+	
+	//
+	
+	
+	
+	num = pageHeight + 200
+	newX = "+=" + num + "px"
+
+	var angle = 0;
+	setInterval(function(){
+	      angle+=3;
+	     $("#jigsawPiece").rotate(angle);
+	},50);
+	
+	
+
+
+</script>

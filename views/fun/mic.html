@@ -1,0 +1,14 @@
+
+{{extend 'layout.html'}}
+<script src="{{=URL('profile','static/js','mic.js')}}"></script>
+<link href="{{=URL('static','css/fun.css')}}" rel="stylesheet" type="text/css">
+
+lets go
+<br>
+<input type="text" x-webkit-speech /> 
+<div id="iframeBox">
+<iframe id="iframe" src="http://www.something.com/">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+
+</div>

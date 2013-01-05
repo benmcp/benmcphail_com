@@ -1,0 +1,616 @@
+
+{{extend 'layout.html'}}
+<script src="../static/js/dancer/src/dancer.js"></script>
+<script src="../static/js/dancer/src/support.js"></script>
+<script src="../static/js/dancer/src/kick.js"></script>
+<script src="../static/js/dancer/src/adapterWebkit.js"></script>
+<script src="../static/js/dancer/src/adapterMoz.js"></script>
+<script src="../static/js/dancer/src/adapterFlash.js"></script>
+<script src="../static/js/dancer/lib/fft.js"></script>
+<script src="../static/js/dancer/lib/flash_detect.js"></script>
+<script src="../static/js/dancer/plugins/dancer.fft.js"></script>
+<script src="../static/js/threepart.js"></script>
+	
+	<head>
+
+		<style>
+			#container {
+				background: #000;
+				width: 100%;
+				height: 100%;
+				margin-left:auto;
+				margin-right:auto;
+			}
+			
+			#coords{
+				position: absolute;
+				top: 200px;
+				width: 100px;
+				height: 100px;
+				display: block;
+			}
+			#buttonBox{
+				position: fixed;
+				bottom: 0px;
+				z-index: 3;
+					height: 70px;
+			}
+			.fontType{
+				font-weight: bold;
+				font-size: 30px;
+				font-family: calibri;
+				color: white;
+				position: relative;
+				height: 100%;
+				padding-top: 10px;
+				text-align: center;
+				padding: 30px;
+			}
+			.fontType:hover{
+
+				color: black;
+				background:white;
+				cursor: hand;
+				cursor: pointer;
+			}
+			#initialOption{
+				margin-left:auto;
+				margin-right:auto;
+				width: 300px;
+				display: block;
+				position: relative;
+				top: 150px;
+				background: black;
+				z-index: 2;
+			}
+			.musicBtn{
+				display: inline-block;
+				z-index: 3;
+				padding-top: 20px;
+				
+			
+			}
+			#initialBg{
+				background: white;
+				z-index: 1;
+				width: 100%;
+				height: 100%;
+				position: fixed;
+				top: 0px;
+			}
+			#footer_options{
+				z-index:2;
+			}
+			html{
+				min-width: 1000px;
+			}
+			
+			#footer_options{
+				min-width: 1000px;
+			}
+			#mainTitle{
+				margin-left:auto;
+				margin-right:auto;
+				width: 400px;
+				top: 50px;
+				display: block;
+				position: relative;
+				background: black;
+				z-index: 2;
+				background: black;
+				
+				font-weight: bold;
+				font-size: 20px;
+				font-family: calibri;
+				color: white;
+				padding-top: 10px;
+				padding: 30px;
+			
+			}
+			#info{
+				display: none;
+				position: fixed;
+				bottom:70px;
+				right:0px;
+				padding: 20px;
+				background: black;
+				color: white;
+				width: 200px;
+				z-index:8;
+			}
+			#infotab{
+				display: block;
+				position: fixed;
+				right:0px;
+				bottom:0px;
+				padding: 20px;
+				font-weight: bold;
+				font-size: 30px;
+				font-family: calibri;
+				color: white;
+				z-index:10;
+				padding-bottom: 30px;
+			}
+			#infotab:hover{
+				color: black;
+				background:white;
+				cursor: hand;
+				cursor: pointer;
+			}
+			#footer_skills{
+				display: none;
+			}
+			#footer_projects{
+				display: none;
+			}
+			#footer_connect{
+				display: none;
+			}
+			#footer_top{
+				display: block;
+				left: auto;
+				width: 80px;
+				margin-left:auto;
+				margin-right: auto;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div id="container">
+			
+			
+		</div>
+<div id="initialFade">
+<div id="mainTitle">
+<center>
+	flow music
+	<BR>
+	<BR>
+	three.js webgl dancer.js
+</center>
+</div>
+
+<div id="initialOption">
+	<div class="fontType" id="lowBtn">low</div>
+	<div class="fontType" id="aveBtn">average</div>
+	<div class="fontType" id="highBtn">high</div>
+	<div class="fontType" id="insaneBtn">insane</div>
+</div>		
+<div id="initialBg"></div>
+</div>
+<div id="infotab" >info</div>
+<div id="info" >
+	<center>
+		This is "Seven Nation Army" by The White Stripes which was remixed by <a href="http://www.theglitchmob.com/music/2011/02/the-white-stripes-seven-nation-army-the-glitch-mob-remix/" target="_blank">the glitch mob</a>
+		<br><BR>
+		note: if there is no music or any visuals you may need a later browser version or try a different browser
+	</center>
+</div>
+<div id="buttonBox">
+	<div class="fontType musicBtn" id="btnPlay">play</div>
+	<div class="fontType musicBtn" id="btnPause">pause</div>
+</div>
+<div id="loading">Loading . . .</div>
+
+
+
+	</body>
+	
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	 -->
+<script type="text/javascript">
+	
+	////////////
+	//
+	// quality listeners
+	//
+	////////////
+	
+	$("#lowBtn").click(function(){
+		musicVis(300);
+	})
+	$("#aveBtn").click(function(){
+		musicVis(1000);
+	})
+	$("#highBtn").click(function(){
+		musicVis(5000);
+	})
+	$("#insaneBtn").click(function(){
+		musicVis(10000);
+	})
+	$("#infotab").hover(
+		function(){
+			$("#info").slideDown('slow');
+		},
+		function(){
+			$("#info").slideUp('slow');
+		}
+	)
+	
+	// fft data
+	
+	var wave ;
+	var start = 0;
+	////////////
+	//
+	// dancer.JS
+	//
+	////////////
+	
+	
+	(function () {
+
+		  var
+		    //AUDIO_FILE = '../songs/zircon_devils_spirit',
+		    AUDIO_FILE = '../static/music/glitch',
+		    fft = document.getElementById( 'fft' ),
+		 //   ctx = fft.getContext( '2d' ),
+		    dancer, kick;
+
+		  /*
+		   * Dancer.js magic 
+		 
+		  Dancer.setOptions({
+		    flashSWF : '../static/js/dancer/lib/soundmanager2.swf',
+		    flashJS  : '../static/js/dancer/lib/soundmanager2.js'
+		  });
+			  */
+		  dancer = new Dancer();
+			  
+		  
+		  var count = 0;
+		  
+		  dancer.after(1, function(){
+			  count += 1;
+			  if (count%5 == 0){
+//			  if (0 == 0){
+				  wave = dancer.getSpectrum()
+				  start = 1;
+			  }
+
+		  })
+			
+		//  blah = dancer.getFrequency( freq [ endFreq ] )
+ /*		  kick = dancer.createKick({
+			    onKick: function () {
+				},
+			    offKick: function () {
+				}
+			  }).on();
+*/		  dancer
+//		    .fft( fft, { fillStyle: '#666' })
+		    .load({ src: AUDIO_FILE, codecs: [  'mp3' ]});
+		  Dancer.isSupported() || loaded();
+		  !dancer.isLoaded() ? dancer.bind( 'loaded', loaded ) : loaded();
+		  
+		  /*
+		   * Loading
+		   */
+
+		  function loaded () {
+
+		      document.getElementById('loading').style.display = 'none';
+		  }
+
+		  // For debugging
+		  window.dancer = dancer;
+
+		})();
+	
+
+	
+	
+	////////////
+	//
+	// THREE.JS
+	//
+	////////////
+	
+	
+	
+	// @see http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+	window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function(/* function */ callback, /* DOMElement */ element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+	
+	
+function musicVis(partSize){
+	 
+	// fade out
+	
+	$("#initialFade").css('display','none')
+	
+	
+	// set the scene size
+	var WIDTH = $(window).width(),
+	    HEIGHT = $(window).height();
+	
+	// set some camera attributes
+	var VIEW_ANGLE = 10,
+	    ASPECT = WIDTH / HEIGHT,
+	    NEAR = 0.1,
+	    FAR = 10000;
+	
+	// number of particles
+	
+	var	particleCount = partSize
+	
+	
+	// get the DOM element to attach to
+	// - assume we've got jQuery to hand
+	var $container = $('#container');
+	
+	// create a WebGL renderer, camera
+	// and a scene
+	var renderer = new THREE.WebGLRenderer();
+	var camera = new THREE.Camera(  VIEW_ANGLE,
+	                                ASPECT,
+	                                NEAR,
+	                                FAR  );
+	var scene = new THREE.Scene();
+	
+	// the camera starts at 0,0,0 so pull it back
+/*	camera.position.z = 400;
+	camera.position.y = 80;
+	camera.position.x = 120;
+	
+	camera.position.z = 200;
+	camera.position.y = 20;
+	camera.position.x = 80;
+	camera.target.x = 250;
+	*/
+
+	camera.position.z = 100;
+	camera.position.y = -500;
+	camera.position.x = -90;
+	camera.target.x = 50;
+	
+	// start the renderer - set the clear colour
+	// to a full black
+	renderer.setClearColor(new THREE.Color(0, 1));
+	renderer.setSize(WIDTH, HEIGHT);
+	
+	// attach the render-supplied DOM element
+	$container.append(renderer.domElement);
+	
+
+	
+	
+	// create the particle variables
+	var particles = new THREE.Geometry(),
+		pMaterial = new THREE.ParticleBasicMaterial({
+			color: 0xFFFFFF,
+			map: THREE.ImageUtils.loadTexture(
+				      "../static/images/part2.png"
+				   ),
+			size: 2,
+			blending: THREE.AdditiveBlending,
+			transparent: true
+		});
+	
+	// now create the individual particles
+	for(var p = 0; p < particleCount; p++) {
+	
+		// create a particle with random
+		// position values, -250 -> 250
+		//var pX = Math.random() * 500 - 250,
+		var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+		//var pX = ((Math.random() * 500)%200)*plusOrMinus;
+		
+		if(partSize == 300){
+			var pX = (Math.round((Math.random() * 2)))*0.2*plusOrMinus;
+		}
+		else{
+			var pX = (Math.round((Math.random() * 20)))*0.2*plusOrMinus;
+		}
+		//var pX = 0;
+			//	pY = -Math.random() * 1,
+		var pY = -100,
+			pZ = Math.random() * 500 - 250,
+		    particle = new THREE.Vertex(
+				new THREE.Vector3(pX, pY, pZ)
+			);
+		// create a velocity vector
+		particle.velocity = new THREE.Vector3(
+			0,				// x
+			0,	// y
+			0);//Math.random());				// z
+
+		// add it to the geometry
+		particles.vertices.push(particle);
+	}
+	
+	// create the particle system
+	var particleSystem = new THREE.ParticleSystem(
+		particles,
+		pMaterial);
+	
+	/// CONTROLS
+//	var controls = new THREE.TrackballControls( camera );
+	
+	var lemX = 0;
+	var lemY = 0;
+	var xDirect = 1;
+	var ySign = 1;
+	var lemA = 4;
+	var xLimit = 3;
+	
+		
+	
+	
+	particleSystem.sortParticles = true;
+	
+	// add it to the scene
+	scene.addChild(particleSystem);
+//	scene.add(particleSystem);
+	
+	// animation loop
+	function update() {
+		
+		// add some rotation to the system
+//		particleSystem.rotation.y += 0.01;
+		
+		
+		// attempting to do a figure eight
+
+		// error somewhere, will attempt later
+		
+		/*
+		// top right
+		
+		
+		if ((xDirect == 1)&& (lemX == 0)){
+			signY = 1;
+			console.log('top right' + " x: " + lemX + " y: " + lemY)
+		}
+		// bottom right
+
+		else if(lemX > xLimit){
+			ySign = -1;
+			xDirect = -1
+			console.log('bottom right' + " x: " + lemX + " y: " + lemY)
+
+		}
+		// top left
+		else if((xDirect == -1) &&(lemX ==0)){
+			ySign = 1;
+			console.log('top left' + " x: " + lemX + " y: " + lemY)
+		}		
+		// bottom left
+		else if((xDirect == -1) && (lemX == -xLimit)){
+			xDirect == 1;
+			ySign == -1;
+			console.log('bottom left' + " x: " + lemX + " y: " + lemY)
+		}
+		console.log('nowhere' + " x: " + lemX + " y: " + lemY)
+		lemX += xDirect*0.01;
+		lemY = ySign*Math.sqrt((lemA*lemX^2 -lemX^4)/lemA)
+		
+		camera.position.y = lemY
+		camera.position.x = lemX
+		
+		*/
+		var pCount = particleCount;
+		while(pCount--) {
+			// get the particle
+			var particle = particles.vertices[pCount];
+			
+			// check if we need to reset
+			if(particle.position.z > 200) {
+				particle.position.z = -50;
+				particle.velocity.z = 0;
+				if(start == 1){
+					particle.position.y = wave[1]*50-2;
+			
+
+				}
+				else{
+					particle.position.y = 0;
+						
+				}
+				
+			}
+			
+			// update height
+			
+			
+			// update the velocity
+			particle.velocity.z += Math.random() * .1;
+			
+			// and the position
+			particle.position.addSelf(
+				particle.velocity);
+		}
+		
+		// flag to the particle system that we've
+		// changed its vertices. This is the
+		// dirty little secret.
+		particleSystem.geometry.__dirtyVertices = true;
+		
+		renderer.render(scene, camera);
+		
+		// set up the next call
+		requestAnimFrame(update);
+		
+		//controls.update();
+		
+	}
+	requestAnimFrame(update);
+	
+	
+	
+	///////////////
+	//
+	// Event listeners
+	//
+	///////////////
+	
+	
+	$("#btnPlay").click(function(){
+		dancer.play()
+		
+	})
+	$("#btnPause").click(function(){
+		dancer.pause()
+		start = 0;
+		
+	})
+	hPageW = $(window).width()/2;
+	hPageH = $(window).height()/2;
+	
+	var globalX;
+	var globalY;
+	var	globalStart = 0;
+	
+	$("html").mousemove(function(e) {
+		centerX = hPageW - e.clientX;
+		centerY = hPageH - e.clientY
+		
+		cameraX = centerX/hPageW*70
+		camera.position.x = cameraX
+		cameraY = centerY/hPageH*70
+		camera.position.y = cameraY
+		
+		
+//		camera.position.y += centerY*0.01;
+//		camera.position.x += centerX*0.01;
+		
+		
+	
+		
+	});
+	
+	var lastScrollTop = 0;
+	$(window).scroll(function(event){
+	   var st = $(this).scrollTop();
+	   if (st > lastScrollTop){
+			camera.position.z += 10; 
+		   
+		   // downscroll code
+	   } else {
+			camera.position.z -= 10; 
+	 // 		alert('scroll up')
+	      // upscroll code
+	   }
+	   lastScrollTop = st;
+	});
+	
+	
+	/*
+	$("canvas").scroll(fucntion(){
+		
+	})
+	*/
+	
+}
+	
+	
+	</script>

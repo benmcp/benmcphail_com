@@ -1,0 +1,175 @@
+{{extend 'layout.html'}}
+<script type="text/javascript">
+var a
+//alert(a)
+//alert(b)
+
+</script>
+
+ <div class="wrapper"><!-- for sticky footer -->
+  	<div class="container">
+        <div id="main_name">
+            <div id="name_splodge">
+                <img src="{{=URL('profile','static/images','name_splodge.png')}}" style="width: 450px; height:450px">
+            </div>
+            <div id="profile_name">
+                ben mcphail
+            </div> 
+            <div id="profile_tagline">enjoy :)</div>
+        
+        </div>
+ </div>
+        <div id="main_skills">
+        	<div id="main_inner_skills">
+	            <div id="section_title">
+	                skills
+	            </div>
+	            <div id="section_content">
+	            <img id="skill_corner" src ="{{=URL('profile','static/images','skill_corner.png')}}">
+	                <div id="section_one">
+	                <div id="section_header">
+	                    source
+	                </div>
+	                i'm a software programmer based in sydney australia working on
+	                web apps designed to empower the individual and strengthen the community.<BR>
+	                <BR> my skills revolve around:<ul>
+	                <li>python</li>
+	                <li> php </li>
+	                <li> javascript(jquery)</li>
+	                <li>html(5)</li>
+	                <li>css(3)</li>
+	                <li>mysql</li>
+	                <li>sqlite</li>
+	                <li>web2py</li>
+	                just to name a few
+	                </ul> 
+	                </div>
+	                <div id="section_two">
+	                    <div id="section_header">
+	                        ideas   
+	                    </div>
+	                i'm a firm believer any problem can be solved with the right people, a whiteboard, and a marker.<br>
+	                <BR>
+	                there is no such thing as a limitation, just merely additional elements to the equation
+	                
+	                </div>
+	                <div id="section_three">
+	                <div id="section_header">
+	                    people
+	                </div>
+	                great people build great experiences. through people comes discussion, through discussion comes customisation and through customisation comes innovation. <BR><BR>i'm always up for a chat and always keen to discuss and explore new ideas and possibilities.<BR><BR>feel free to contact me for a greet and meet, i love takling code</div>
+	            </div>
+	        </div>
+        </div>
+      <div class="container">                 
+        
+        <div id="main_projects">
+            <div id="section_title">
+                portfolio/projects
+            </div>            
+            <div class ="humotiv" id="project_header">
+            flow music 
+            </div>
+            <a href ="{{=URL('profile','fun','part')}}" target="_blank">
+            <img id="humotiv_img" src ="{{=URL('profile','static/images','musicVisual.png')}}" style="height: 450px; width: 800px;">
+            </a>
+            <div id="humotiv_info">
+            	an experiment done using three.js and webgl. the music spectrum data was obtained via <a href="https://github.com/jsantell/dancer.js/">dance.js</a> which
+            	is an amazing piece of software if you want to tear music apart and piece it back together in a more unique manner - note: this only works with chrome
+            </div>
+            <div class ="humotiv" id="project_header">
+            toying with three.js 
+            </div>
+            <a href ="{{=URL('profile','fun','threejs')}}" target="_blank">
+            <img id="humotiv_img" src ="{{=URL('profile','static/images','threejsBox.png')}}" style="height: 450px; width: 800px;">
+            </a>
+            <div id="humotiv_info">
+            	after months of watching others play with <a href ="http://mrdoob.github.com/three.js/" target="_blank">three.js</a>
+            	i finally had to try it out. though it is powerful with webgl, currently not all browsers support this, which makes it
+            	difficult to imagine mass usage in the future - note: this only works with chrome
+            </div>
+
+
+
+
+            <div class ="humotiv" id="project_header">
+            skywyr 
+            </div>
+            <a href ="http://www.skywyr.com" target="_blank">
+            <img id="humotiv_img" src ="{{=URL('profile','static/images','skywyr.png')}}" style="height: 450px; width: 800px;">
+            </a>
+            <div id="humotiv_info">
+            	after my external hard drive crashed, losing all my music i created skywyr. ease of use was key with
+            	this design, allowing the user to simply drag and drop their music into the browser. skywyr was also created
+            	in 48 hrs as part of a self imposed marathon. <a>click here to read the blog</a>
+            </div>
+            <div class ="humotiv" id="project_header">
+            humotiv 
+            </div>
+            <a href ="http://www.humotiv.com" target="_blank">
+            <img id="humotiv_img" src ="{{=URL('profile','static/images','humotiv.png')}}" style="height: 450px; width: 800px;">
+            </a>
+            <div id="humotiv_info">
+                humotiv is a world wide collaboration of all things human. set up as photo based blogging website, people can come together and share, rate, rank and truly discover what it means to be human and what feelings truly extend across age, race, gender and orientation
+           </div>
+           <div id="project_header">
+            oddjob
+            </div>
+            
+            <img id="oddjob_img" src ="{{=URL('profile','static/images','oddjob.png')}}" style="height: 450px; width: 800px;">
+            <div id="humotiv_info">
+                oddjob is webapp designed to build an environment where users can buy and sell their skills and services within their local community and promotes the importance of local communities which are continually challenege by a forever growing global economy
+                <BR><BR>note - oddjob is currently still in development but will become live very soon
+         
+            </div>
+           	<div id="project_header">
+            	playing with .animate()
+            </div>
+            <a href="{{=URL('profile','fun','jigsaw')}}">
+            	<img id="oddjob_img" src ="{{=URL('profile','static/images','jigsawMain.png')}}" style="height: 400px; width: 800px;">
+            </a>
+            
+            <div id="humotiv_info">
+            	just playing around with .animate, rotate and Math.random()...
+            </div>
+            <div id="project_header">
+            	skatr
+            </div>
+            <img id="oddjob_img" src ="{{=URL('profile','static/images','skatr.png')}}" style="height: 400px; width: 800px;">
+            <div id="humotiv_info">
+                skatr is a small side project using the unity game engine (built in javascript) for android and iphone. due to the other projects consuming a lot of my time, this project will not be completed until the end of 2012.
+                <BR><BR>note - stay tuned for screen shots and video demonstrations!
+            </div>
+       		<div id="project_header">
+            	...
+            </div>
+            <a href="{{=URL('profile','default','fun')}}">
+            	<img id="oddjob_img" src ="{{=URL('profile','static/images','question.png')}}" style="height: 400px; width: 800px;">
+            </a>
+            
+            <div id="humotiv_info">
+            	and this is what i do when i need a break from coding... WARNING: this may give you a headache
+            	<BR><BR><B style="font-weight: bold;">note - though i have additional projects, none merit any mention...yet</B>
+            </div>
+       
+        </div>
+     
+
+        
+      </div><!-- container -->
+   	  <div id="main_connect">
+   	  	<div class="connectTop"></div>
+   	  	<div id="main_inner_connect">
+   	  	   <div id="section_title" style="color: white">
+               connect
+           </div>
+           		<div id="section_content_bottom" class="connect_content" style="color: white">
+           			please feel free to send me an email @ ben@benmcphail.com or add me on g+!<BR><BR>note: a blog will be coming soon
+    		   	</div>
+	   	  	</div>
+
+       </div>
+   
+    
+   <!--  <div class="push"></div> -->
+  </div><!-- wrapper -->

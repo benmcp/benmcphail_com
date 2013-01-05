@@ -1,0 +1,360 @@
+{{extend 'layout.html'}}
+<script src="../static/js/dancer/src/dancer.js"></script>
+<script src="../static/js/dancer/src/support.js"></script>
+<script src="../static/js/dancer/src/kick.js"></script>
+<script src="../static/js/dancer/src/adapterWebkit.js"></script>
+<script src="../static/js/dancer/src/adapterMoz.js"></script>
+<script src="../static/js/dancer/src/adapterFlash.js"></script>
+<script src="../static/js/dancer/lib/fft.js"></script>
+<script src="../static/js/dancer/lib/flash_detect.js"></script>
+<script src="../static/js/dancer/plugins/dancer.fft.js"></script>
+<script src="../static/js/three.min.js"></script>
+<style type="text/css">
+
+
+#fft{
+	display: block;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+}
+#loading{
+	display: block;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+}
+#rawData{
+	display: block;
+	position: absolute;
+ 	top: 0px;
+ 	right: 0px;
+ 	padding-left:20px;
+ 	width: 400px;
+ 	height: 300px;
+ 		background: black;
+	color: white;
+ 	overflow:hidden;
+}
+#info{
+	display: block;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+	width: 500px;
+}
+#innerScroll{
+	position:absolute;
+	bottom:0;
+	display: block;
+	width: 100%;
+	height: 100%;
+
+}
+#innerRight{
+	position:absolute;
+displaY: block;
+
+width: 50%;
+right: 0px;
+	bottom:0;
+}
+#container {
+position: absolute;
+top: 300px;
+width: 400px;
+height: 300px;
+background: black;
+}
+#innerLeft{
+	position:absolute;
+displaY: block;
+
+width: 50%;
+	bottom:0;
+}
+</style>
+<h1>music canvas</h1>
+<div id="loading">Loading . . .</div>
+<div id="rawData">
+	<div id="innerScroll">
+		<div id="innerLeft">
+		</div>
+		<div id="innerRight">
+		</div>
+		
+	</div>
+</div>
+<canvas id="fft" height="400" width="512"></canvas>
+<div id="info">Music info</div>
+<div id="container"><canvas width="400" height="300"></canvas></div>
+<!--
+<script type="text/javascript">
+
+// particles
+
+
+	
+	// @see http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+	window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function(/* function */ callback, /* DOMElement */ element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+	// set the scene size
+	var WIDTH = 400,
+	    HEIGHT = 300;
+	
+	// set some camera attributes
+	var VIEW_ANGLE = 45,
+	    ASPECT = WIDTH / HEIGHT,
+	    NEAR = 0.1,
+	    FAR = 10000;
+	
+	// get the DOM element to attach to
+	// - assume we've got jQuery to hand
+	var $container = $('#container');
+	
+	// create a WebGL renderer, camera
+	// and a scene
+	var renderer = new THREE.WebGLRenderer();
+	var camera = new THREE.Camera(  VIEW_ANGLE,
+	                                ASPECT,
+	                                NEAR,
+	                                FAR  );
+	var scene = new THREE.Scene();
+	
+	// the camera starts at 0,0,0 so pull it back
+	camera.position.z = 300;
+	
+	// start the renderer - set the clear colour
+	// to a full black
+	renderer.setClearColor(new THREE.Color(0, 1));
+	renderer.setSize(WIDTH, HEIGHT);
+	
+	// attach the render-supplied DOM element
+	$container.append(renderer.domElement);
+	
+	// create the particle variables
+	var particleCount = 1800,
+	    particles = new THREE.Geometry(),
+		pMaterial = new THREE.ParticleBasicMaterial({
+			color: 0xFFFFFF,
+			size: 20,
+			map: THREE.ImageUtils.loadTexture(
+				"../static/images/particle.png"
+			),
+			blending: THREE.AdditiveBlending,
+			transparent: true
+		});
+	
+	// now create the individual particles
+	for(var p = 0; p < particleCount; p++) {
+	
+		// create a particle with random
+		// position values, -250 -> 250
+		var pX = Math.random() * 500 - 250,
+			pY = Math.random() * 500 - 250,
+			pZ = Math.random() * 500 - 250,
+		    particle = new THREE.Vector3(
+				new THREE.Vector3(pX, pY, pZ)
+			);
+		// create a velocity vector
+		particle.velocity = new THREE.Vector3(
+			0,				// x
+			-Math.random(),	// y
+			0);				// z
+
+		// add it to the geometry
+		particles.vertices.push(particle);
+	}
+	
+	// create the particle system
+	var particleSystem = new THREE.ParticleSystem(
+		particles,
+		pMaterial);
+	
+	particleSystem.sortParticles = true;
+	
+	// add it to the scene
+	scene.addChild(particleSystem);
+	
+	// animation loop
+	function update() {
+		
+		// add some rotation to the system
+		particleSystem.rotation.y += 0.01;
+		
+		var pCount = particleCount;
+		while(pCount--) {
+			// get the particle
+			var particle = particles.vertices[pCount];
+			
+			// check if we need to reset
+			if(particle.position.y < -200) {
+				particle.position.y = 200;
+				particle.velocity.y = 0;
+			}
+			
+			// update the velocity
+			particle.velocity.y -= Math.random() * .1;
+			
+			// and the position
+			particle.position.addSelf(
+				particle.velocity);
+		}
+		
+		// flag to the particle system that we've
+		// changed its vertices. This is the
+		// dirty little secret.
+		particleSystem.geometry.__dirtyVertices = true;
+		
+		renderer.render(scene, camera);
+		
+		// set up the next call
+		requestAnimFrame(update);
+	}
+	requestAnimFrame(update);
+	
+-->
+<script type="text/javascript">
+
+
+	// threejs
+		
+		// set the scene size
+	var WIDTH = 400,
+	  HEIGHT = 300;
+	
+	// set some camera attributes
+	var VIEW_ANGLE = 45,
+	  ASPECT = WIDTH / HEIGHT,
+	  NEAR = 0.1,
+	  FAR = 10000;
+	
+	// get the DOM element to attach to
+	// - assume we've got jQuery to hand
+	var $container = $('#container');
+	
+	// create a WebGL renderer, camera
+	// and a scene
+	var renderer = new THREE.WebGLRenderer();
+	var camera =
+	  new THREE.PerspectiveCamera(
+	    VIEW_ANGLE,
+	    ASPECT,
+	    NEAR,
+	    FAR);
+		
+		
+	var scene = new THREE.Scene(); 
+//	var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);  
+
+
+	// PARTICLES
+	
+
+	
+	var renderer = new THREE.WebGLRenderer(); 
+
+	//renderer.setSize(window.innerWidth, window.innerHeight); 
+	$("#container").html(renderer.domElement);
+//	document.body.appendChild(renderer.domElement);
+	
+
+	// dancer.js
+
+
+	(function () {
+
+		  var
+		//    AUDIO_FILE = '../songs/zircon_devils_spirit',
+		    AUDIO_FILE = '../static/music/schism',
+		    fft = document.getElementById( 'fft' ),
+		    ctx = fft.getContext( '2d' ),
+		    dancer, kick;
+
+		  /*
+		   * Dancer.js magic 
+		 
+		  Dancer.setOptions({
+		    flashSWF : '../static/js/dancer/lib/soundmanager2.swf',
+		    flashJS  : '../static/js/dancer/lib/soundmanager2.js'
+		  });
+			  */
+		  dancer = new Dancer();
+			  
+		  var wave;
+		  
+		  var count = 0;
+		  
+		  dancer.after(1, function(){
+			  count += 1;
+			  if (count%5 == 0){
+				  wave = dancer.getWaveform()
+				  $("#innerLeft").append("<BR>" + wave[2])
+				  $("#innerRight").append("<BR>" + wave[50])
+							  
+			  }
+
+		  })
+			
+		//  blah = dancer.getFrequency( freq [ endFreq ] )
+		  kick = dancer.createKick({
+			    onKick: function () {
+			      ctx.fillStyle = '#ff0077';
+			    },
+			    offKick: function () {
+			      ctx.fillStyle = '#666';
+			    }
+			  }).on();
+		  dancer
+		    .fft( fft, { fillStyle: '#666' })
+		    .load({ src: AUDIO_FILE, codecs: [  'mp3' ]});
+		  Dancer.isSupported() || loaded();
+		  !dancer.isLoaded() ? dancer.bind( 'loaded', loaded ) : loaded();
+
+		  /*
+		   * Loading
+		   */
+
+		  function loaded () {
+		    var
+		      loading = document.getElementById( 'loading' ),
+		      anchor  = document.createElement('A'),
+		      supported = Dancer.isSupported(),
+		      p;
+
+		    anchor.appendChild( document.createTextNode( supported ? 'Play!' : 'Close' ) );
+		    anchor.setAttribute( 'href', '#' );
+		    loading.innerHTML = '';
+		    loading.appendChild( anchor );
+
+		    if ( !supported ) {
+		      p = document.createElement('P');
+		      p.appendChild( document.createTextNode( 'Your browser does not currently support either Web Audio API or Audio Data API. The audio may play, but the visualizers will not move to the music; check out the latest Chrome or Firefox browsers!' ) );
+		      loading.appendChild( p );
+		    }
+
+		    anchor.addEventListener( 'click', function () {
+		      dancer.play();
+		      document.getElementById('loading').style.display = 'none';
+		    });
+		  }
+
+		  // For debugging
+		  window.dancer = dancer;
+
+		})();
+
+
+
+
+</script>
+
+	</body>

@@ -1,0 +1,308 @@
+body {
+	margin: 0px;
+}
+
+#mainTop {
+	position: fixed;
+	width: 100%;
+	height: 100px;
+	top: 0px;
+	border-bottom: 1px solid #F0EDEE;
+	background: white;
+	z-index: 2;
+/*	box-shadow: -1px -2px 15px 2px #333;
+*/}
+
+#mainCenter {
+	max-width: 980px;
+	margin-left: auto;
+	margin-right: auto;
+
+	
+}
+
+#mainLogo {
+	position: absolute;
+	left: 50px;
+	top: 0px;
+	height: 130px;
+	margin-top: 10px;
+}
+
+#mainTiles {
+display: inline-block;
+position: relative;
+height: 200px;
+width: 520px;
+float: right;
+}
+
+.headerTile {
+width: 90px;
+display: inline-block;
+margin-top: 45px;
+text-align: center;
+font-weight: bold;
+font-size: 14px;
+font-family: Arial, Helvetica, sans-serif;
+text-transform: uppercase;
+padding: 5px;
+}
+
+#freeCall {
+font-weight: bold;
+font-size: 20px;
+position: absolute;
+padding: 10px;
+left: 250px;
+background: #F7F7F7;
+color: #555;
+}
+
+.headerTile:hover {
+	cursor: pointer;
+	cursor: hand;
+background: #F1F1F1;;
+}
+/*
+#mainAbout:hover {
+	border-bottom: 5px solid #235E3F;
+}
+
+#mainResources:hover {
+	border-bottom: 5px solid #36368A;
+}
+
+#mainLinks:hover {
+	border-bottom: 5px solid #7D4796;
+}
+
+#mainMedia:hover {
+	border-bottom: 5px solid #36368A;
+}
+
+#mainContact:hover {
+	border-bottom: 5px solid #235E3F;
+}
+*/
+.mainBody {
+max-width: 980px;
+margin-left: auto;
+margin-right: auto;
+position: relative;
+display: block;
+margin-bottom: 100px;
+padding-top: 100px;
+}
+
+
+
+#bodyInfo {
+display: inline-block;
+position: relative;
+width: 450px;
+font-size: 20px;
+text-align: right;
+font-family: Verdana, Geneva, sans-serif;
+line-height: 40px;
+padding: 20px;
+border-right: 2px solid #EEE;
+padding-right: 40px;
+background: white;
+
+float: left;}
+
+#newsTile {
+	display: inline-block;
+	position: relative;
+	width: 380px;
+	height: 400px;
+	padding: 20px;
+	background: white;
+	margin-left: 30px;
+	float: right;
+/*	box-shadow: -1px -1px 15px 2px #999;
+*/}
+
+#newsArticle {
+	display: block;
+	position: relative;
+	margin-top: 30px;
+}
+
+#newsDate {
+	display: block;
+	position: relative;
+	height: 40px;
+}
+
+#newsHeading {
+	font-size: 25px;
+	font-family: Verdana, Geneva, sans-serif;
+	border-bottom: 5px solid green;
+padding-bottom: 10px;
+margin-bottom: 10px;
+}
+
+#newsDate {
+	font-weight: bold;
+}
+
+#newsBody {
+	text-align: left;
+	overflow-y: scroll;
+	height: 350px;
+
+}
+
+#articleContent {
+	font-size: 17px;
+}
+
+#moreNews {
+	position: absolute;
+	bottom: 0px;
+}
+
+#mainStrip {
+	width: 100%;
+	background-image: url('../images/handfield.jpg');
+	background-size: 100%;
+	height: 600px;
+	margin-top: 100px;
+	position: relative;
+}
+
+#aboutSection {
+
+background-image: url('../images/groovepaper.png');
+min-height: 500px;
+padding-bottom: 100px;
+}
+
+#aboutHeading {
+color: #222;
+padding: 20px;
+
+font-weight: bold;
+font-size: 30px;
+font-family: Arial, Helvetica, sans-serif;
+border-bottom: 1px solid #AAA;
+}
+
+#aboutBody {
+	
+}
+.aboutParagraph{
+
+font-size: 18px;
+position: absolute;
+
+font-size: 25px;
+line-height: 40px;
+padding-left: 80px;
+padding-right: 80px;
+padding-bottom: 80px;
+}
+#aboutSub{
+		padding:20px;
+	font-size: 16px;	
+}
+#aboutMenu{
+position: relative;
+display: block;
+width: 200px;
+float: left;
+}
+.aboutMenuTile{
+display: block;
+position: relative;
+
+
+font-weight: bold;
+font-size: 15px;
+font-family: Arial, Helvetica, sans-serif;
+padding-top: 10px;
+padding-bottom: 10px;
+padding-left: 20px;
+border-bottom: 1px solid #AAA;
+}
+#aboutContent{
+display: inline-block;
+width: 750px;	
+}
+#test{
+background-image: url('../images/test.png');
+width: 100%;
+height: 18px;
+top: -57px;
+position: relative;	
+	
+}
+.aboutMenuTile:hover{
+	background: #188713;
+	cursor: pointer;
+	cursor: hand;
+}
+#aboutMission{
+	display: none	
+}
+#aboutCall{
+	display: none	
+}
+#topQuote{
+background-image: url('../images/quotes.png');
+position: absolute;
+top: 0px;
+left: 0px;
+width: 45px;
+height: 40px;
+}
+#botQuote{
+background-image: url('../images/quotes.png');
+position: absolute;
+bottom: 25px;
+right: 0px;
+width: 45px;
+height: 40px;
+}
+#resourceSection{
+background-image: url('../images/stressed_linen.png');
+background-attachment: fixed;
+height: 100%;
+		
+}
+#resourceHeading{
+text-align: center;
+color: #DDD;
+font-size: 80px;
+font-family: Verdana, Geneva, sans-serif;
+margin-bottom: 30px;
+}
+#resourceA{
+width: 400px;
+
+display: inline-block;
+padding: 50px;
+top: -40px;
+position: relative;
+}
+#resourceB{
+width: 350px;
+padding: 50px;
+display: inline-block;
+}
+#resourceBody{
+	background: #EEE;
+margin-bottom: 300px;
+position: relative;	
+}
+.mainResBody{
+max-width: 980px;
+margin-left: auto;
+margin-right: auto;
+position: relative;
+display: block;
+margin-bottom: 100px;
+padding-top: 20px;
+}
